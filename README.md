@@ -304,10 +304,14 @@ The services subpackage allows you to easily publish and consume AzureML Web Ser
 Publishing
 ----------
 
+```python
+from azureml import services
+from azureml.services import publish
+
 Python functions can either be published using the @publish decorator or by calling the publish method directly.  To publish a function using the decorator you can do:
 
 ```python
-@services.publish(workspace, workspace_token)
+@services.publish(workspace_id, authorization_token)
 @services.types(a = float, b = float)
 @services.returns(float)
 def func(a, b):
@@ -317,7 +321,7 @@ def func(a, b):
 This publishes a function which takes two floating point values and divides them.  Alternately you can publish a function by calling the publish method directly:
 
 ```python
-my_func = publish(my_func, workspace, workspace_token, files_list, endpoint=None)
+api = publish(func, workspace_id, authorization_token, files_list, endpoint=None)
 ```
 
 If a function has no source file associated with it (for example, you're developing inside of a REPL environment) then the functions byte code is serialized.  If the function refers to any global variables those will also be serialized using Pickle.  In this mode all of the state which you're referring to needs to be already defined (e.g. your published function should come after any other functions you are calling).
